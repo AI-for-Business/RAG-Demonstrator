@@ -1,0 +1,80 @@
+# Python virtual environment
+venv/
+env/
+*.venv
+.env
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Streamlit specific
+.streamlit/secrets.toml
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Machine Learning / Data Science specific
+*.pkl
+*.joblib
+*.h5
+*.hdf5
+*.model
+*.pt
+*.pth
+
+# Environment and configuration files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Lab
+.jupyterlab-settings/
+
+# Pytest
+.pytest_cache/
+
+# Mypy cache
+.mypy_cache/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Data directories (optional - uncomment if you want to ignore data)
+# data/
+# raw_data/
+# processed_data/
+
+# Large model files (optional - uncomment if you want to ignore these)
+# *.pth
+# *.pt
+# *.bin
