@@ -21,4 +21,12 @@ Activate the virtual environment: `source venv/bin/activate`.
 
 Inside the venv, install the required packages: `pip install -r requirements.txt`
 
+## Running the Demonstrator
+
+Run ollama via `ollama serve`. In a seperate window, start the model of your choice `ollama run <model>`. 
+
+Activate the virtual environment as before `source venv/bin/activate`. 
+
+Then, start the streamlit app `streamlit run ui.py`
+
 
