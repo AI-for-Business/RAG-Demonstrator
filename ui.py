@@ -1,5 +1,9 @@
 import streamlit as st
+from populate_database import updateDatabase
 from query_data import query_rag 
+import os
+
+DATA_PATH = "data"
 
 def main():
     # Set page title and icon
@@ -7,31 +11,27 @@ def main():
     
     # Title and description
     st.title("RAG Prototype")
-    st.markdown("Enter your query to retrieve augmented information.")
 
     uploadDocuments()
 
-    with st.form(key='query_form'):
-        user_query = st.text_input(
-            label="Enter your query:", 
-            placeholder="Ask a question about your documents..."
-        )
-        submit_button = st.form_submit_button(label='Query')
+    # Initialize chat history
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
     
-    # Process query when submitted
-    if submit_button and user_query:
-        with st.spinner('Retrieving and generating response...'):
-            try:
-                response = query_rag(
-                    query_text=user_query, 
-                )
-                
-                # Display response
-                st.subheader("Response")
-                st.write(response)
-            except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
+    if prompt := st.chat_input("Enter your query to retrieve augmented information."):
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        st.session_state.messages.append({"role": "user", "content": prompt})
+
+        with st.chat_message("assistant"):
+            response = st.write(query_rag(prompt))
+
+        st.session_state.messages.append({"role": "assistant", "content": response})
 
 def uploadDocuments():
     with st.sidebar:
@@ -42,13 +42,20 @@ def uploadDocuments():
             "Choose documents",
             accept_multiple_files=True,
             type=["pdf", "txt"],
-            help="You can upload PDF, or TXT files.",
+            help="You can upload PDF or TXT files.",
         )
 
-        for file in uploaded_files:
-            pass
+        if uploaded_files:
+            with st.spinner("Uploading files..."):
+                for file in uploaded_files:
+                    path = os.path.join(DATA_PATH, file.name)
+                    with open(path, "wb") as writer:
+                        writer.write(file.getbuffer())
 
-    
+                updateDatabase()
+                st.success("Files uploaded and database updated!")
+        else:
+            return   
 
 if __name__ == "__main__":
     main()

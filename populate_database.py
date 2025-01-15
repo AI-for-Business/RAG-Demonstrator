@@ -13,24 +13,12 @@ from langchain_chroma import Chroma
 CHROMA_PATH = "chroma"
 DATA_PATH = "data"
 
-
-def main():
-
-    # Parse command-line arguments to check if the database should be reset
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--reset", action="store_true", help="Reset the database.")
-    args = parser.parse_args()
-    
-    # If the reset flag is set, clear the existing database
-    if args.reset:
-        print("✨ Clearing Database")
+def updateDatabase(should_reset_db=False):
+    if should_reset_db:
         clear_database()
 
-    # Load documents from the data directory
     documents = load_documents()
-    # Split the documents into smaller chunks for processing
     chunks = split_documents(documents)
-    # Add the chunks to the Chroma database
     add_to_chroma(chunks)
 
 
@@ -63,7 +51,6 @@ def add_to_chroma(chunks: list[Document]):
     # Retrieve existing document IDs from the database to avoid duplicates
     existing_items = db.get(include=[])  # IDs are included by default
     existing_ids = set(existing_items["ids"])
-    print(f"Number of existing documents in DB: {len(existing_ids)}")
 
     # Identify new chunks that are not already in the database
     new_chunks = []
@@ -73,16 +60,10 @@ def add_to_chroma(chunks: list[Document]):
 
     # Add new chunks to the database if any
     if len(new_chunks):
-        print(f"👉 Adding new documents: {len(new_chunks)}")
         new_chunk_ids = [chunk.metadata["id"] for chunk in new_chunks]
         db.add_documents(new_chunks, ids=new_chunk_ids)
 
-    print("✅ Documents added successfully.")
-
-
 def calculate_chunk_ids(chunks):
-
-
     # This will create IDs like "data/monopoly.pdf:6:2"
     # Page Source : Page Number : Chunk Index
 
@@ -118,4 +99,4 @@ def clear_database():
 
 
 if __name__ == "__main__":
-    main()
+    updateDatabase()
