@@ -14,6 +14,7 @@ def main():
 
     with st.sidebar:
         model = selectModel()
+        temperature = selectTemperature()
         uploadDocuments()
 
     # Initialize chat history
@@ -32,12 +33,15 @@ def main():
 
         with st.chat_message("assistant"):
             with st.spinner("Generating response..."):
-                response = st.write(query_rag(prompt, model))
+                response = st.write(query_rag(prompt, model, temperature))
 
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 def selectModel():
-    return st.selectbox("Model Selection", ('gpt-4', 'gpt-4o', 'gpt-4o-mini', 'o1', 'o1-mini' 'Llama3.2'))
+    return st.selectbox("Model Selection", ('gpt-4', 'gpt-4o', 'gpt-4o-mini', 'o1', 'o1-mini', 'Llama3.2'))
+
+def selectTemperature():
+    return st.slider(label="Model temperature", min_value=0.0, max_value=1.0, value=0.5)
 
 def uploadDocuments():
     st.header("Document Upload")

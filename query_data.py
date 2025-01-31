@@ -1,8 +1,8 @@
 import argparse
-from langchain_chroma import Chroma
+from langchain_chroma import Chroma # type: ignore
 from langchain.prompts import ChatPromptTemplate
-from langchain_openai import OpenAI
-from langchain_ollama import OllamaLLM
+from langchain.chat_models import ChatOpenAI
+from langchain_ollama import OllamaLLM # type: ignore
 from dotenv import load_dotenv
 import os
 
@@ -20,6 +20,8 @@ Answer the question based only on the following context:
 ---
 
 Answer the question based on the above context: {question}
+
+Answer in the language which the question is asked in.
 """
 
 
@@ -31,10 +33,10 @@ def main():
     query_text = args.query_text
 
     # Execute the retrieval-augmented generation (RAG) query
-    query_rag(query_text)
+    query_rag(query_text, "Llama3.2", 0.5)
 
 
-def query_rag(query_text: str, model):
+def query_rag(query_text: str, model, temperature: float):
     # Prepare the Chroma database with the embedding function
     embedding_function = get_embedding_function()
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
@@ -49,10 +51,10 @@ def query_rag(query_text: str, model):
     # print(prompt)  # Uncomment this line to debug the generated prompt
 
     if model == 'Llama3.2':
-        model = OllamaLLM(model="llama3.2")
+        model = OllamaLLM(model="llama3.2", temperature=temperature)
         response_text = model.invoke(prompt)
     else:
-        response_text = query_openai_model(prompt, model)
+        response_text = query_openai_model(prompt, model, temperature)
 
     # Extract source IDs from the retrieved documents for reference
     sources = [doc.metadata.get("id", None) for doc, _score in results]
@@ -62,7 +64,7 @@ def query_rag(query_text: str, model):
     print(formatted_response)
     return response_text
 
-def query_openai_model(prompt: ChatPromptTemplate, model: str):
+def query_openai_model(prompt: str, model: str, temperature: float):
     load_dotenv()
     api_key = os.getenv("OPENAI_KEY")
 
@@ -71,9 +73,10 @@ def query_openai_model(prompt: ChatPromptTemplate, model: str):
     
     os.environ["OPENAI_API_KEY"] = api_key
     
-    llm = OpenAI(model=model)
+    llm = ChatOpenAI(model=model, temperature=temperature)
 
-    return llm.invoke(prompt)
+    # Call the chat model
+    return llm.predict(prompt)
 
 if __name__ == "__main__":
     main()
