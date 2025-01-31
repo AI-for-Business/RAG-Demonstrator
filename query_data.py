@@ -1,8 +1,10 @@
 import argparse
 from langchain_chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
-#from langchain_community.llms.ollama import Ollama  #deprecated
+from langchain_openai import OpenAI
 from langchain_ollama import OllamaLLM
+from dotenv import load_dotenv
+import os
 
 from get_embedding_function import get_embedding_function
 
@@ -32,7 +34,7 @@ def main():
     query_rag(query_text)
 
 
-def query_rag(query_text: str):
+def query_rag(query_text: str, model):
     # Prepare the Chroma database with the embedding function
     embedding_function = get_embedding_function()
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
@@ -45,10 +47,12 @@ def query_rag(query_text: str):
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt = prompt_template.format(context=context_text, question=query_text)
     # print(prompt)  # Uncomment this line to debug the generated prompt
-    
-    # Initialize the Ollama LLM model (e.g., "llama3.2") and generate a response
-    model = OllamaLLM(model="llama3.2")
-    response_text = model.invoke(prompt)
+
+    if model == 'Llama3.2':
+        model = OllamaLLM(model="llama3.2")
+        response_text = model.invoke(prompt)
+    else:
+        response_text = query_openai_model(prompt, model)
 
     # Extract source IDs from the retrieved documents for reference
     sources = [doc.metadata.get("id", None) for doc, _score in results]
@@ -58,6 +62,18 @@ def query_rag(query_text: str):
     print(formatted_response)
     return response_text
 
+def query_openai_model(prompt: ChatPromptTemplate, model: str):
+    load_dotenv()
+    api_key = os.getenv("OPENAI_KEY")
+
+    if not api_key:
+        raise ValueError("No key found in .env file")
+    
+    os.environ["OPENAI_API_KEY"] = api_key
+    
+    llm = OpenAI(model=model)
+
+    return llm.invoke(prompt)
 
 if __name__ == "__main__":
     main()

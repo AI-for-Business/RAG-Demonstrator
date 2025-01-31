@@ -1,6 +1,6 @@
 # Getting started
 
-Please install a wsl distro of your choice or run on Linux. I will assume that you use a distro based on apt, if not, use the package manager that comes with your distro. 
+Please install a wsl distro of your choice or run on Linux. This assumes that you use a distro based on apt, if not, use the package manager that comes with your distro. 
 
 ## Ollama
 
@@ -20,6 +20,8 @@ Create a virtual environment: `python3 -m venv venv`
 Activate the virtual environment: `source venv/bin/activate`. 
 
 Inside the venv, install the required packages: `pip install -r requirements.txt`
+
+Finally, copy the .env.example file to a normal .env file and paste a valid openai key. Do not commit this key, ever. 
 
 ## Running the Demonstrator
 
