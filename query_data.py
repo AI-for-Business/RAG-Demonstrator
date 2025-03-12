@@ -6,7 +6,7 @@ from langchain_ollama import OllamaLLM # type: ignore
 from dotenv import load_dotenv
 import os
 
-from get_embedding_function import get_embedding_function
+from llama_provider import get_embedding_function
 
 # Define the path to the Chroma database directory
 CHROMA_PATH = "chroma"
@@ -51,7 +51,7 @@ def query_rag(query_text: str, model, temperature: float):
     # print(prompt)  # Uncomment this line to debug the generated prompt
 
     if model == 'Llama3.2':
-        model = OllamaLLM(model="llama3.2", temperature=temperature)
+        model = OllamaLLM(model="llama3.2", temperature=temperature, base_url="http://ollama:11434")
         response_text = model.invoke(prompt)
     else:
         response_text = query_openai_model(prompt, model, temperature)

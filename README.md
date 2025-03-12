@@ -1,4 +1,16 @@
-# Getting started
+# A simple RAG - Demonstrator
+
+RAG, or retrieval augmented generation, is a method of supplementing generative AI models with specific knowledge. This simple streamlit prototype shows off the capabilities of RAG.
+
+# Quick Setup
+
+Install [Docker](https://docs.docker.com/desktop/setup/install/windows-install/) and start the Docker daemon by starting the Docker Desktop app.
+
+Create and run the image: `docker compose up --build`. Ollama and Streamlit will run in seperate containers.
+
+You can now reach the ui locally at http://127.0.0.1:8501/
+
+# Advanced Setup without Docker
 
 Please install a wsl distro of your choice or run on Linux. This assumes that you use a distro based on apt, if not, use the package manager that comes with your distro. 
 
@@ -23,12 +35,18 @@ Inside the venv, install the required packages: `pip install -r requirements.txt
 
 Finally, copy the .env.example file to a normal .env file and paste a valid openai key. Do not commit this key, ever. 
 
-## Running the Demonstrator
+## Running the Demonstrator locally
 
 Run ollama via `ollama serve`. In a seperate window, start the model of your choice `ollama run <model>`. 
 
 Activate the virtual environment as before `source venv/bin/activate`. 
 
 Then, start the streamlit app `streamlit run ui.py`
+
+## Building the image
+
+
+
+
 
 
