@@ -43,8 +43,6 @@ Activate the virtual environment as before `source venv/bin/activate`.
 
 Then, start the streamlit app `streamlit run ui.py`
 
-## Building the image
-
 
 
 
