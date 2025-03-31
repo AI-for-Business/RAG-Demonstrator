@@ -13,16 +13,29 @@ CHROMA_PATH = "chroma"
 
 # Template for the prompt to be sent to the language model
 PROMPT_TEMPLATE = """
-Answer the question based only on the following context:
+You are an AI assistant using a Retrieval-Augmented Generation (RAG) system.
+
+Here is the conversation history:
+
+{history}
+
+---
+
+Now, answer the latest question using the following context:
 
 {context}
 
 ---
 
-Answer the question based on the above context: {question}
+Latest Question: {question}
 
-Answer in the language which the question is asked in.
+Answer in the language in which the question is asked.
+
+If you find relevant information in the context, quote it in your answer.
+
+If you do not find any relevant information in the context, always indicate so in your answer and use your general knowledge to answer the question, if you feel like you know the answer. 
 """
+
 
 
 def main():
@@ -33,10 +46,10 @@ def main():
     query_text = args.query_text
 
     # Execute the retrieval-augmented generation (RAG) query
-    query_rag(query_text, "Llama3.2", 0.5)
+    query_rag(query_text, "Llama3.2", 0.5, "")
 
 
-def query_rag(query_text: str, model, temperature: float):
+def query_rag(query_text: str, model: str, temperature: float, history: str =""):
     # Prepare the Chroma database with the embedding function
     embedding_function = get_embedding_function()
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
@@ -47,12 +60,12 @@ def query_rag(query_text: str, model, temperature: float):
     context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
     # Create the prompt by filling in the template with context and the question
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-    prompt = prompt_template.format(context=context_text, question=query_text)
+    prompt = prompt_template.format(context=context_text, question=query_text, history=history)
     # print(prompt)  # Uncomment this line to debug the generated prompt
 
     if model == 'Llama3.2':
-        model = OllamaLLM(model="llama3.2", temperature=temperature, base_url="http://ollama:11434")
-        response_text = model.invoke(prompt)
+        ollama = OllamaLLM(model="llama3.2", temperature=temperature, base_url="http://ollama:11434")
+        response_text = ollama.invoke(prompt)
     else:
         response_text = query_openai_model(prompt, model, temperature)
 
