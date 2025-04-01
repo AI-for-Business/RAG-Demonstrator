@@ -23,40 +23,22 @@ def main():
 
 
 def select_model():
-    return st.selectbox("Model Selection", ('gpt-4', 'gpt-4o', 'gpt-4o-mini', 'o1', 'o1-mini', 'Llama3.2'))
+    return st.selectbox("Modellauswahl", ('gpt-4', 'gpt-4o', 'gpt-4o-mini', 'o1', 'o1-mini', 'Llama3.2'))
 
 def select_temperature():
-    return st.slider(label="Model temperature", min_value=0.0, max_value=1.0, value=0.5)
+    return st.slider(label="Kreativitätsausmaß", min_value=0.0, max_value=1.0, value=0.5)
 
 def upload_documents():
-    '''
-    st.header("Document Upload")
-    # File uploader that allows multiple file uploads
-    uploaded_files = st.file_uploader(
-        "Choose documents",
-        accept_multiple_files=True,
-        type=["pdf", "txt"],
-        help="You can upload PDF or TXT files.",
-    )
-    if uploaded_files:
-        with st.spinner("Uploading files..."):
-            for file in uploaded_files:
-                path = os.path.join(DATA_PATH, file.name)
-                with open(path, "wb") as writer:
-                    writer.write(file.getbuffer())
-            updateDatabase()
-            st.success("Files uploaded and database updated!")'
-    '''
-    st.header("Document Upload")
+    st.header("Dokumente hochladen")
 
     if "uploaded_files" not in st.session_state:
         st.session_state.uploaded_files = set()
 
     uploaded_files = st.file_uploader(
-        "Choose documents",
+        "Wähle Dokumente",
         accept_multiple_files=True,
         type=["pdf", "txt"],
-        help="You can upload PDF or TXT files.",
+        help="PDF oder txt",
     ) or []  # Ensure uploaded_files is always a list
 
     new_files = [file for file in uploaded_files if file.name not in st.session_state.uploaded_files]
@@ -70,7 +52,7 @@ def upload_documents():
                 st.session_state.uploaded_files.add(file.name)  # Track uploaded files
 
             updateDatabase()  # Only update if new files were uploaded
-            st.success("New files uploaded and database updated!")
+            st.success("Neue Dateteien hochgeladen und Vektordatenbank aktualisiert")
 
 def chat(model, temperature):
     # Initialize chat history if not already in session state
@@ -78,7 +60,7 @@ def chat(model, temperature):
         st.session_state.messages = []
 
     # Accept a new prompt from the user
-    prompt = st.chat_input("Enter your query to retrieve augmented information.")
+    prompt = st.chat_input("Stelle eine Frage, um augmentierte Informationen zu erhalten")
 
     # Process the new message if one was submitted
     if prompt:
