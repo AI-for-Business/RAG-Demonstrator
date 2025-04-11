@@ -43,6 +43,47 @@ Activate the virtual environment as before `source venv/bin/activate`.
 
 Then, start the streamlit app `streamlit run ui.py`
 
+# Hosting on Azure
+
+
+# Getting Started
+
+First off, due to weird azure quirks, you have to replace all instances of ollama:11434 with localhost 11434. Custom domains do not work in azure, and docker compose does not work with localhost.  
+
+Install the Azure package:
+
+```Powershell
+Update-Module -Name Az -Force
+```
+
+Next, login to Azure
+
+``` Powershell
+az login
+az acr login --name <Name_of_container_Registry>
+```
+
+Then, tag the image that you want to push
+
+``` Powershell
+docker images
+docker tag rag-demonstrator-rag-demonstrator <name-of-login-server (e.g: ragprototyp.azurecr.io)>/ui
+docker tag ollama/ollama <name-of-login-server (e.g: ragprototyp.azurecr.io)>/ollama
+```
+
+Push the images to the registry via the tags:
+
+``` PowerShell
+docker push <name-of-loginserver>/ui
+docker push <name-of-login-server>/ollama
+```
+
+Next, we create the Web-App in Azure. Navigate to portal.azure.com and create the Webapp Service. Select a plan with at least 8gb RAM. Under container, make sure to enable sidecar support. Select the ui container and specify the port (8501). Once the container is spun up, go to the tab Deployment Center and add a custom container. Here, add your previously pushed ollama image and specify the port (11434). Wait until the ollama container is running, now you should be able to use the webapp in Azure.
+
+Make sure to stop the container when you are not using it anymore. The 8GB server is very expensive.
+
+
+
 
 
 
