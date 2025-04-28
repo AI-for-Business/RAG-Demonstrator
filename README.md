@@ -104,9 +104,3 @@ As such:
 * You can find the homepage of the project ABBA: **A**I for **B**usiness | **B**usiness for **A**I
 [here](https://abba-project.de/).
 * You can contact the authors by sending us an [email](mailto:abba-services@fim-rc.de).
-
-# Author's note:
-These datasets have been created using ABBA's
-[Decision Tree Teaching Assistant](https://github.com/AI-for-Business/UBT_YZ_DeTTA) (abbreviated DeTTA), which has
-also been published under the CC-BY-NC-SA license. With DeTTA you can generate an infinite amount datasets of
-adjustable size and complexity along step-by-step calculations and solution visualizations.
