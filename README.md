@@ -82,10 +82,31 @@ Next, we create the Web-App in Azure. Navigate to portal.azure.com and create th
 
 Make sure to stop the container when you are not using it anymore. The 8GB server is very expensive.
 
+# Copyright / License
+This work is licensed under a Creative Commons Attribution 4.0 International License (CC BY-NC-SA 4.0).
 
+![](CC-BY-NC-SA.jpg)
+ 
+As such:
 
+### You are free to:
+* Share — copy and redistribute the material in any medium or format
+* Adapt — remix, transform, and build upon the material
+* The licensor cannot revoke these freedoms as long as you follow the license terms.
 
+### Under the following terms:
+* Attribution — You must give appropriate credit , provide a link to the license, and indicate if changes were made . You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+* NonCommercial — You may not use the material for commercial purposes .
+* ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
 
+# Contact / About us
+* You can find all of our repositories [here](https://github.com/orgs/AI-for-Business/repositories).
+* You can find the homepage of the project ABBA: **A**I for **B**usiness | **B**usiness for **A**I
+[here](https://abba-project.de/).
+* You can contact the authors by sending us an [email](mailto:abba-services@fim-rc.de).
 
-
-
+# Author's note:
+These datasets have been created using ABBA's
+[Decision Tree Teaching Assistant](https://github.com/AI-for-Business/UBT_YZ_DeTTA) (abbreviated DeTTA), which has
+also been published under the CC-BY-NC-SA license. With DeTTA you can generate an infinite amount datasets of
+adjustable size and complexity along step-by-step calculations and solution visualizations.
